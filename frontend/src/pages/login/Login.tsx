@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import LoginHeader from "../../shared-components/login-header/LoginHeader";
-import { Body, LoginButton } from "./styles";
+import { Body, LoginButton, LinkRegister } from "./styles";
 import { TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -89,6 +89,14 @@ const Login = () => {
         <LoginButton variant="contained" onClick={() => onClickEnter()}>
           Entrar
         </LoginButton>
+
+        <LinkRegister>
+          Não tem uma conta?{" "}
+          <a href="#">
+            Cadastre-se
+          </a>
+        </LinkRegister>
+      
       </Body>
     </>
   );

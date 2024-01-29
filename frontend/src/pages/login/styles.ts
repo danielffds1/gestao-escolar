@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles';
 
 export const Container = styled(Box)(({ theme }) => ({
@@ -20,3 +20,15 @@ export const Body = styled(Box)(({ theme }) => ({
 export const LoginButton = styled(Button)(({theme}) => ({
   marginTop: '24px'
 }))
+
+export const LinkRegister = styled(Typography)(({ theme }) => ({
+  fontSize: '15px',
+  color: '#707070',
+  fontFamily: 'Arial, sans-serif',
+  textDecoration: 'none',
+
+  '& a': {
+    color: '#0F77D7',
+    textDecoration: 'inherit',
+  },
+}));

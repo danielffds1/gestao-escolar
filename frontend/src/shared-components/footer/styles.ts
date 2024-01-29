@@ -12,6 +12,7 @@ export const Container = styled(Box)(({theme}) => ({
   gap: '16px',
   position: 'fixed',
   bottom: 0,
+  padding: '10px 0px',
 }))
 
 export const Title = styled(Typography)(({theme}) => ({
@@ -26,3 +27,10 @@ export const Subtitle = styled(Typography)(({theme}) => ({
   fontWeight: 700,
   color: theme.palette.secondary.main,
 }))
+
+export const Img = styled('img')(({ theme }) => ({
+  width: '70px',
+  maxWidth: '50px',
+  height: 'auto',
+  objectFit: 'contain',
+}));

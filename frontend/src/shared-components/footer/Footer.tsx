@@ -1,10 +1,9 @@
 import React from "react";
-import { Container, Subtitle, Title } from "./styles";
-import LogoIcon from "../../assets/svgs/LogoIcon";
+import { Container, Subtitle, Title, Img } from "./styles";
 
 const Footer = () => (
   <Container>
-    <LogoIcon width={44} height={58} />
+    <Img src={require("../../assets/imgs/Logo_BHZ.png")} alt="Logo BHZ"/>
     <Title>
       {"Sistema de "}
       <Subtitle>gestão escolar</Subtitle>

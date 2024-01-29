@@ -7,7 +7,7 @@ export const Container = styled(Box)(({theme}) => ({
   justifyContent: 'center',
   flex: 1,
   background: theme.palette.primary.main,
-  margin: '-8px',
+  margin: '0px -8px',
   gap: '16px',
   padding: '16px 0px'
 }))
