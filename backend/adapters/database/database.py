@@ -1,14 +1,16 @@
 """Database ORM models for SQLAlchemy."""
 
 from sqlalchemy import create_engine, Engine
-from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, Table, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, relationship
 
 import sys
 sys.path.append('../../../')
 
-from backend.core.domain.models import Aluno, PeriodoLetivo, DiaSemAula
+from backend.core.domain.models import (
+    Aluno, ResponsavelPorAluno, PeriodoLetivo, DiaSemAula
+)
 
 class DatabaseSession:
     """Database session class for SQLAlchemy. It creates a database engine
@@ -45,6 +47,13 @@ class DatabaseSession:
 
 Base = declarative_base()
 
+
+# Association table
+responsavel_aluno_association = Table('responsavel_aluno', Base.metadata,
+    Column('responsavel_id', Integer, ForeignKey('responsavel_por_aluno.id')),
+    Column('aluno_id', Integer, ForeignKey('aluno.id'))
+)
+
 class AlunoORM(Base):
     """Aluno ORM class for SQLAlchemy."""
     __tablename__ = 'aluno'
@@ -52,10 +61,14 @@ class AlunoORM(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
     born_date = Column(Date, nullable=False)
-    address = Column(String(200), nullable=False)
-    tutor_name = Column(String(100), nullable=False)
-    tutor_phone = Column(String(20), nullable=False)
     class_shift = Column(String(20), nullable=False)
+
+    # Relationship with ResponsavelPorAlunoORM
+    responsaveis = relationship(
+        "ResponsavelPorAlunoORM",
+        secondary=responsavel_aluno_association,
+        back_populates="alunos",
+    )
 
     @staticmethod
     def from_aluno(aluno):
@@ -63,9 +76,8 @@ class AlunoORM(Base):
         return AlunoORM(
             name=aluno.name,
             born_date=aluno.born_date,
-            address=aluno.address,
-            tutor_name=aluno.tutor_name,
-            tutor_phone=aluno.tutor_phone,
+            # school_name=aluno.school_name,
+            # commute_type=aluno.commute_type, # se a pé ou acompanhado por alguém
             class_shift=aluno.class_shift
         )
 
@@ -76,12 +88,79 @@ class AlunoORM(Base):
             id=aluno_orm.id,
             name=aluno_orm.name,
             born_date=aluno_orm.born_date,
-            address=aluno_orm.address,
-            tutor_name=aluno_orm.tutor_name,
-            tutor_phone=aluno_orm.tutor_phone,
             class_shift=aluno_orm.class_shift
         )
 
+class ResponsavelPorAlunoORM(Base):
+    """ResponsavelPorAluno ORM class for SQLAlchemy."""
+    __tablename__ = 'responsavel_por_aluno'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(100), nullable=False)
+    relationship = Column(String(100), nullable=False) # se mãe, pai, avó, tia, etc
+    identitiy = Column(String(20), nullable=False)
+    cpf = Column(String(11), nullable=False)
+    born_date = Column(Date, nullable=False)
+    civil_status = Column(String(20), nullable=False)
+    street_name = Column(String(100), nullable=False)
+    street_number = Column(String(10), nullable=False)
+    neighborhood = Column(String(100), nullable=False)
+    housing_additional_info = Column(String(100), nullable=False)
+    cep = Column(String(8), nullable=False)
+    phone = Column(String(20), nullable=False)
+    landline = Column(String(20), nullable=False)
+    email = Column(String(100), nullable=False)
+    observation = Column(String(200), nullable=False)
+
+    # Relationship with AlunoORM
+    alunos = relationship(
+        "AlunoORM",
+        secondary=responsavel_aluno_association,
+        back_populates="responsaveis",
+    )
+
+    @staticmethod
+    def from_responsavel(responsavel):
+        """Converts a Responsavel object to a ResponsavelPorAlunoORM object."""
+        return ResponsavelPorAlunoORM(
+            name=responsavel.name,
+            relationship=responsavel.relationship,
+            identitiy=responsavel.identitiy,
+            cpf=responsavel.cpf,
+            born_date=responsavel.born_date,
+            civil_status=responsavel.civil_status,
+            street_name=responsavel.street_name,
+            street_number=responsavel.street_number,
+            neighborhood=responsavel.neighborhood,
+            housing_additional_info=responsavel.housing_additional_info,
+            cep=responsavel.cep,
+            phone=responsavel.phone,
+            landline=responsavel.landline,
+            email=responsavel.email,
+            observation=responsavel.observation
+        )
+
+    @staticmethod
+    def to_responsavel(responsavel_orm):
+        """Converts a ResponsavelPorAlunoORM object to a Responsavel object."""
+        return ResponsavelPorAluno(
+            id=responsavel_orm.id,
+            name=responsavel_orm.name,
+            relationship=responsavel_orm.relationship,
+            identitiy=responsavel_orm.identitiy,
+            cpf=responsavel_orm.cpf,
+            born_date=responsavel_orm.born_date,
+            civil_status=responsavel_orm.civil_status,
+            street_name=responsavel_orm.street_name,
+            street_number=responsavel_orm.street_number,
+            neighborhood=responsavel_orm.neighborhood,
+            housing_additional_info=responsavel_orm.housing_additional_info,
+            cep=responsavel_orm.cep,
+            phone=responsavel_orm.phone,
+            landline=responsavel_orm.landline,
+            email=responsavel_orm.email,
+            observation=responsavel_orm.observation
+        )
 
 class ProfessorORM(Base):
     """Professor ORM class for SQLAlchemy."""

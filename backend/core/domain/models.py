@@ -11,11 +11,27 @@ class Aluno:
     id: int | None
     name: str
     born_date: date
-    address: str
-    tutor_name: str
-    tutor_phone: str
     class_shift: str
 
+@dataclass
+class ResponsavelPorAluno:
+    """ResponsavelPorAluno model class for domain layer."""
+    id: int
+    name: str
+    relationship: str
+    identitiy: str
+    cpf: str
+    born_date: date
+    civil_status: str
+    street_name: str
+    street_number: str
+    neighborhood: str
+    housing_additional_info: str
+    cep: str
+    phone: str
+    landline: str
+    email: str
+    observation: str
 
 @dataclass
 class Presenca:
